@@ -103,12 +103,34 @@ Run (example)
 ```
 python train.py \
    --dataset_name llff \
-   --root_dir $LLFF_DIR \
+   --root_dir ./datasets/nerf_llff_data/desk02 \
    --N_importance 64 --img_wh 504 378 \
    --num_epochs 30 --batch_size 1024 \
    --optimizer adam --lr 5e-4 \
    --lr_scheduler steplr --decay_step 10 20 --decay_gamma 0.5 \
    --exp_name exp
+```
+```
+python train.py \
+   --dataset_name llff \
+   --root_dir ./datasets/nerf_llff_data/laptop \
+   --N_importance 64 --img_wh 504 378 \
+   --num_epochs 50 --batch_size 1024 \
+   --optimizer adam --lr 5e-4 \
+   --lr_scheduler steplr --decay_step 10 20 --decay_gamma 0.5 \
+   --exp_name laptop01_20221115 \
+   --spheric
+```
+```
+python train.py \
+   --dataset_name llff \
+   --root_dir ./datasets/nerf_llff_data/laptop \
+   --N_importance 64 --img_wh 2016 1512 \
+   --num_epochs 50 --batch_size 1024 \
+   --optimizer adam --lr 5e-4 \
+   --lr_scheduler steplr --decay_step 10 20 --decay_gamma 0.5 \
+   --exp_name laptop01_20221115_down_by_2 \
+   --spheric
 ```
 
 These parameters are chosen to best mimic the training settings in the original repo. See [opt.py](opt.py) for all configurations.
@@ -154,6 +176,22 @@ python eval.py \
    --dataset_name blender --scene_name lego \
    --img_wh 400 400 --N_importance 64 --ckpt_path $CKPT_PATH
 ```
+
+```
+python eval.py \
+   --root_dir ./datasets/nerf_llff_data/desk02 \
+   --dataset_name llff --scene_name desk02 \
+   --img_wh 504 378 --N_importance 64 --ckpt_path ./ckpts/exp/epoch=17.ckpt
+```
+
+```
+python eval.py \
+   --root_dir ./datasets/nerf_llff_data/laptop \
+   --dataset_name llff --scene_name laptop \
+   --img_wh 504 378 --N_importance 64 --ckpt_path ./ckpts/laptop01_20221115/epoch=6.ckpt \
+   --spheric_poses
+```
+
 **IMPORTANT** : Don't forget to add `--spheric_poses` if the model is trained under `--spheric` setting!
 
 It will create folder `results/{dataset_name}/{scene_name}` and run inference on all test data, finally create a gif out of them.
