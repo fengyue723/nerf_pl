@@ -77,7 +77,6 @@ class BlenderDataset(Dataset):
         # test Peiyi
         print("test2 by Peiyi", self.directions.shape)
         print(self.directions)
-        
 
     def define_transforms(self):
         self.transform = T.ToTensor()

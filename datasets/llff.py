@@ -96,6 +96,7 @@ def create_spiral_poses(radii, focus_depth, n_poses=120, right_eye = False, thre
         poses_spiral: (n_poses, 3, 4) the poses in the spiral path
     """
 
+
     print("radii: ", radii)
     poses_spiral = []
     for t in np.linspace(0, 4*np.pi, n_poses+1)[:-1]: # rotate 4pi (2 rounds)

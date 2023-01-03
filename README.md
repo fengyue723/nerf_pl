@@ -110,6 +110,7 @@ python train.py \
    --lr_scheduler steplr --decay_step 2 4 8 --decay_gamma 0.5 \
    --exp_name exp2
     
+
 ```
 python train.py \
    --dataset_name llff \
@@ -175,6 +176,7 @@ python train.py \
    --exp_name laptop2_8_20221118 \
    --spheric
 ```
+
 ```
 python train.py \
    --dataset_name llff \
@@ -312,6 +314,7 @@ python eval.py \
 ```
 python eval.py \
    --root_dir ./datasets/nerf_llff_data/laptop2 \
+<<<<<<< HEAD
    --dataset_name llff --scene_name laptop2_8_20221118_compare \
    --img_wh 504 378 --N_importance 64 --ckpt_path ./ckpts/laptop2_8_20221118/epoch=46.ckpt \
    --spheric_poses
@@ -325,6 +328,12 @@ python eval.py \
 ```
 
 
+=======
+   --dataset_name llff --scene_name laptop2_8_20221118 \
+   --img_wh 504 378 --N_importance 128 --ckpt_path ./ckpts/laptop2_8_20221118/epoch=46.ckpt \
+   --spheric_poses
+```
+>>>>>>> 9c91791711e86ef645599c26514c34e38b36392e
    
 **IMPORTANT** : Don't forget to add `--spheric_poses` if the model is trained under `--spheric` setting!
 
