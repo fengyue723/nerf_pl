@@ -3,11 +3,9 @@ from kornia import create_meshgrid
 import numpy as np
 
 def left_to_right_eye(x, y, z, theta):
-    theta_a = np.arctan(y/x)
-    r = np.sqrt(np.square(x) + np.square(y))
-    theta_prime = 2 * np.arcsin(np.sqrt(np.square(x) + np.square(y) + np.square(z)) * np.sin(theta/2) / r)
-    x_prime = r * np.cos(theta_a + theta_prime)
-    y_prime = r * np.sin(theta_a + theta_prime)
+    common_part = np.cos(theta) - np.square(z) * (1 - np.cos(theta)) / (np.square(x) + np.square(y))
+    x_prime = x * common_part - y * np.sqrt(1 - np.square(common_part))
+    y_prime = y * common_part + x * np.sqrt(1 - np.square(common_part))
     return x_prime, y_prime
 
 def get_ray_directions(H, W, focal):
