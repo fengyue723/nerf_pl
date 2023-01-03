@@ -80,7 +80,7 @@ def center_poses(poses):
     return poses_centered, np.linalg.inv(pose_avg_homo)
 
 
-def create_spiral_poses(radii, focus_depth, n_poses=120):
+def create_spiral_poses(radii, focus_depth, n_poses=120, right_eye = False, threeD_angle = 0.05):
     """
     Computes poses that follow a spiral path for rendering purpose.
     See https://github.com/Fyusion/LLFF/issues/19
@@ -101,6 +101,10 @@ def create_spiral_poses(radii, focus_depth, n_poses=120):
         # the parametric function of the spiral (see the interactive web)
         center = np.array([np.cos(t), -np.sin(t), -np.sin(0.5*t)]) * radii
 
+        if right_eye:
+            x_prime, y_prime = left_to_right_eye(center[0], center[1], center[2] + focus_depth, np.arcsin(threeD_angle))
+            center = np.array([x_prime, y_prime, center[2]])
+
         # the viewing z axis is the vector pointing from the @focus_depth plane
         # to @center
         z = normalize(center - np.array([0, 0, -focus_depth]))
@@ -110,7 +114,7 @@ def create_spiral_poses(radii, focus_depth, n_poses=120):
         x = normalize(np.cross(y_, z)) # (3)
         y = np.cross(z, x) # (3)
 
-        poses_spiral += [np.stack([x, y, z, center], 1)] # (3, 4)
+        poses_spiral += [np.stack([y, -x, z, center], 1)] # (3, 4)
 
     return np.stack(poses_spiral, 0) # (n_poses, 3, 4)
 
@@ -157,7 +161,7 @@ def create_spheric_poses(radius, n_poses=120):
 
 
 class LLFFDataset(Dataset):
-    def __init__(self, root_dir, split='train', img_wh=(504, 378), spheric_poses=False, val_num=1):
+    def __init__(self, root_dir, split='train', img_wh=(504, 378), spheric_poses=False, val_num=1, right_eye=False, threeD_angle=0.05):
         """
         spheric_poses: whether the images are taken in a spheric inward-facing manner
                        default: False (forward-facing)
@@ -169,6 +173,10 @@ class LLFFDataset(Dataset):
         self.spheric_poses = spheric_poses
         self.val_num = max(1, val_num) # at least 1
         self.define_transforms()
+        self.right_eye = right_eye
+        print("right_eye: ", right_eye)
+        self.threeD_angle = threeD_angle
+        print("threeD_angle: ", threeD_angle)
 
         self.read_meta()
         self.white_back = False
@@ -265,7 +273,8 @@ class LLFFDataset(Dataset):
                                   # given in the original repo. Mathematically if near=1
                                   # and far=infinity, then this number will converge to 4
                 radii = np.percentile(np.abs(self.poses[..., 3]), 90, axis=0)
-                self.poses_test = create_spiral_poses(radii, focus_depth)
+                self.poses_test = create_spiral_poses(radii, focus_depth, 120, self.right_eye, self.threeD_angle)
+                print("got shot!")
             else:
                 radius = 1.1 * self.bounds.min()
                 self.poses_test = create_spheric_poses(radius)

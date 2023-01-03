@@ -33,6 +33,10 @@ def get_opts():
                         help='resolution (img_w, img_h) of the image')
     parser.add_argument('--spheric_poses', default=False, action="store_true",
                         help='whether images are taken in spheric poses (for llff)')
+    parser.add_argument('--right_eye', default=False, action="store_true",
+                        help='whether images are taken from right eye')
+    parser.add_argument('--threeD_angle', type=float, default=0.05,
+                        help='arcsin(this_value) is 3d_angle between 2 eyes')
 
     parser.add_argument('--N_samples', type=int, default=64,
                         help='number of coarse samples')
@@ -95,6 +99,8 @@ if __name__ == "__main__":
               'img_wh': tuple(args.img_wh)}
     if args.dataset_name == 'llff':
         kwargs['spheric_poses'] = args.spheric_poses
+        kwargs['right_eye'] = args.right_eye
+        kwargs['threeD_angle'] = args.threeD_angle
     dataset = dataset_dict[args.dataset_name](**kwargs)
 
     embedding_xyz = Embedding(3, 10)

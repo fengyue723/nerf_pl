@@ -2,7 +2,8 @@
 logs/
 ckpts/
 results/
-datasets/
+datasets/nerf_llff_data
+datasets/synthetic
 *.ply
 *.vol
 

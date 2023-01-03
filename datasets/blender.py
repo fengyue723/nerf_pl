@@ -9,17 +9,17 @@ from torchvision import transforms as T
 from .ray_utils import *
 
 class BlenderDataset(Dataset):
-    def __init__(self, root_dir, split='train', img_wh=(800, 800)):
+    def __init__(self, root_dir, split='train', img_wh=(800, 800), another_eye = False):
         self.root_dir = root_dir
         self.split = split
         assert img_wh[0] == img_wh[1], 'image width must equal image height!'
         self.img_wh = img_wh
         self.define_transforms()
 
-        self.read_meta()
+        self.read_meta(another_eye)
         self.white_back = True
 
-    def read_meta(self):
+    def read_meta(self, another_eye):
         with open(os.path.join(self.root_dir,
                                f"transforms_{self.split}.json"), 'r') as f:
             self.meta = json.load(f)
@@ -38,6 +38,8 @@ class BlenderDataset(Dataset):
         # ray directions for all pixels, same for all images (same H, W, focal)
         self.directions = \
             get_ray_directions(h, w, self.focal) # (h, w, 3)
+        if another_eye:
+            self.directions = np.stack([np.array(left_to_right_eye(x, y, z, 2*np.arctan(0.065)), z) for x,y,z in self.directions], 0)
             
         if self.split == 'train': # create buffer of all rays and rgb data
             self.image_paths = []
