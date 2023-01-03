@@ -125,14 +125,46 @@ python train.py \
 python train.py \
    --dataset_name llff \
    --root_dir ./datasets/nerf_llff_data/laptop \
-   --N_importance 64 --img_wh 2016 1512 \
+   --N_importance 64 --img_wh 1008 756 \
    --num_epochs 50 --batch_size 1024 \
    --optimizer adam --lr 5e-4 \
    --lr_scheduler steplr --decay_step 10 20 --decay_gamma 0.5 \
-   --exp_name laptop01_20221115_down_by_2 \
+   --exp_name laptop01_20221115_down_by_4 \
    --spheric
 ```
-
+```
+python train.py \
+   --dataset_name llff \
+   --root_dir ./datasets/nerf_llff_data/radio \
+   --N_importance 64 --img_wh 504 378 \
+   --num_epochs 50 --batch_size 1024 \
+   --optimizer adam --lr 5e-4 \
+   --lr_scheduler steplr --decay_step 10 20 --decay_gamma 0.5 \
+   --exp_name radio_8_2022_1116 \
+   --spheric
+```
+```
+python train.py \
+   --dataset_name llff \
+   --root_dir ./datasets/nerf_llff_data/radio \
+   --N_importance 64 --img_wh 1008 756 \
+   --num_epochs 50 --batch_size 1024 \
+   --optimizer adam --lr 5e-4 \
+   --lr_scheduler steplr --decay_step 10 20 --decay_gamma 0.5 \
+   --exp_name radio_4_2022_1117 \
+   --spheric
+```
+```
+python train.py \
+   --dataset_name llff \
+   --root_dir ./datasets/nerf_llff_data/laptop2 \
+   --N_importance 64 --img_wh 504 378 \
+   --num_epochs 50 --batch_size 1024 \
+   --optimizer adam --lr 5e-4 \
+   --lr_scheduler steplr --decay_step 10 20 --decay_gamma 0.5 \
+   --exp_name laptop2_8_20221118 \
+   --spheric
+```
 These parameters are chosen to best mimic the training settings in the original repo. See [opt.py](opt.py) for all configurations.
 
 You can monitor the training process by `tensorboard --logdir logs/` and go to `localhost:6006` in your browser.
@@ -191,7 +223,49 @@ python eval.py \
    --img_wh 504 378 --N_importance 64 --ckpt_path ./ckpts/laptop01_20221115/epoch=6.ckpt \
    --spheric_poses
 ```
-
+```
+python eval.py \
+   --root_dir ./datasets/nerf_llff_data/laptop \
+   --dataset_name llff --scene_name laptop_8_to_1 \
+   --img_wh 4032 3024 --N_importance 64 --ckpt_path ./ckpts/laptop01_20221115/epoch=6.ckpt \
+   --spheric_poses
+```
+```
+python eval.py \
+   --root_dir ./datasets/nerf_llff_data/laptop \
+   --dataset_name llff --scene_name laptop01_20221115_down_by_2 \
+   --img_wh 2016 1512 --N_importance 64 --ckpt_path ./ckpts/laptop01_20221115_down_by_2/epoch=4.ckpt \
+   --spheric_poses
+```
+```
+python eval.py \
+   --root_dir ./datasets/nerf_llff_data/laptop \
+   --dataset_name llff --scene_name laptop01_20221115_down_by_4 \
+   --img_wh 1008 756 --N_importance 64 --ckpt_path ./ckpts/laptop01_20221115_down_by_4/epoch=5.ckpt \
+   --spheric_poses
+```
+```
+python eval.py \
+   --root_dir ./datasets/nerf_llff_data/radio \
+   --dataset_name llff --scene_name radio_8_2022_1116_10 \
+   --img_wh 504 378 --N_importance 128 --ckpt_path ./ckpts/radio_8_2022_1116/epoch=10.ckpt \
+   --spheric_poses
+```
+```
+python eval.py \
+   --root_dir ./datasets/nerf_llff_data/radio \
+   --dataset_name llff --scene_name radio_4_2022_1117_9 \
+   --img_wh 1008 756 --N_importance 128 --ckpt_path ./ckpts/radio_4_2022_1117/epoch=9.ckpt \
+   --spheric_poses
+```
+```
+python eval.py \
+   --root_dir ./datasets/nerf_llff_data/laptop2 \
+   --dataset_name llff --scene_name laptop2_8_20221118 \
+   --img_wh 504 378 --N_importance 128 --ckpt_path ./ckpts/laptop2_8_20221118/epoch=46.ckpt \
+   --spheric_poses
+```
+   
 **IMPORTANT** : Don't forget to add `--spheric_poses` if the model is trained under `--spheric` setting!
 
 It will create folder `results/{dataset_name}/{scene_name}` and run inference on all test data, finally create a gif out of them.
