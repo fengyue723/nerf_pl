@@ -314,7 +314,6 @@ python eval.py \
 ```
 python eval.py \
    --root_dir ./datasets/nerf_llff_data/laptop2 \
-<<<<<<< HEAD
    --dataset_name llff --scene_name laptop2_8_20221118_compare \
    --img_wh 504 378 --N_importance 64 --ckpt_path ./ckpts/laptop2_8_20221118/epoch=46.ckpt \
    --spheric_poses
@@ -326,15 +325,15 @@ python eval.py \
    --dataset_name llff --scene_name desk02_5v \
    --img_wh 504 378 --N_importance 64 --ckpt_path ./ckpts/desk02_5v/epoch=6.ckpt
 ```
-
-
-=======
-   --dataset_name llff --scene_name laptop2_8_20221118 \
-   --img_wh 504 378 --N_importance 128 --ckpt_path ./ckpts/laptop2_8_20221118/epoch=46.ckpt \
+```
+python eval.py \
+   --root_dir ./datasets/nerf_llff_data/radio \
+   --dataset_name llff --scene_name radio_8_2023_0105_epoch10_spiral_poses \
+   --img_wh 504 378 --N_importance 128 --ckpt_path ./ckpts/radio_8_2022_1116/epoch=10.ckpt \
    --spheric_poses
 ```
->>>>>>> 9c91791711e86ef645599c26514c34e38b36392e
-   
+
+
 **IMPORTANT** : Don't forget to add `--spheric_poses` if the model is trained under `--spheric` setting!
 
 It will create folder `results/{dataset_name}/{scene_name}` and run inference on all test data, finally create a gif out of them.
